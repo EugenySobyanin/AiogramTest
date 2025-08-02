@@ -1,31 +1,29 @@
 import asyncio
 import os
+
 from aiogram import Bot, Dispatcher, types
-from aiogram.filters import CommandStart
 from dotenv import find_dotenv, load_dotenv
+
+from common.bot_cmds_list import private
+from handlers.user_private import user_private_router
 
 
 load_dotenv(find_dotenv())
 
+ALLOWED_UPDATES = ['message', 'edited_message']
+
 bot = Bot(token=os.getenv('TOKEN'))
 dp = Dispatcher()
 
-
-@dp.message(CommandStart())
-async def start_cmd(message: types.Message):
-    await message.answer('Это была команда старт.')
-
-
-@dp.message()
-async def echo(message: types.Message, bot: Bot):
-    await bot.send_message(message.from_user.id, 'Ответ')
-    await message.reply('Гоу эвей.')
-    await message.answer(message.text)
+dp.include_router(user_private_router)
 
 
 async def main():
-    await ...
-    await dp.start_polling(bot)
+    await bot.delete_webhook(drop_pending_updates=True)
+    await bot.set_my_commands(
+        commands=private, scope=types.BotCommandScopeAllPrivateChats()
+    )
+    await dp.start_polling(bot, allowed_updates=ALLOWED_UPDATES)
 
 
 if __name__ == '__main__':
