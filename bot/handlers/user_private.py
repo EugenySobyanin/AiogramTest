@@ -1,6 +1,8 @@
 from aiogram import  F, types, Router
 from aiogram.filters import CommandStart, Command
 
+from keyboards.keyboards import get_main_menu
+
 user_private_router = Router()
 
 
@@ -11,7 +13,7 @@ async def start_cmd(message: types.Message):
 
 @user_private_router.message(Command('menu'))
 async def menu_cmd(message: types.Message):
-    await message.answer('Вот меню.')
+    await message.answer('Вот меню.', reply_markup=get_main_menu('admin'))
 
 
 @user_private_router.message(F.text.lower() == 'о нас')
