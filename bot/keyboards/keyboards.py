@@ -1,4 +1,4 @@
-from aiogram.utils.keyboard import ReplyKeyboardBuilder, ReplyKeyboardMarkup, ReplyKeyboadMaKeyboardButton
+from aiogram.utils.keyboard import ReplyKeyboardBuilder, ReplyKeyboardMarkup
 
 
 def get_main_menu(role: str):
@@ -15,17 +15,17 @@ def get_main_menu(role: str):
     }
 
     builder = ReplyKeyboardBuilder()
-    
+
     if role == "barista":
         buttons = base_buttons["barista"]
     elif role == "manager":
         buttons = base_buttons["manager"]
     elif role == "admin":
         buttons = base_buttons["manager"] + base_buttons["admin_extra"]
-    
+
     for button_text in buttons:
         builder.button(text=button_text)
-    
+
     builder.adjust(2)
     return builder.as_markup(resize_keyboard=True)
 
